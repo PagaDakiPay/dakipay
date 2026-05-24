@@ -6,80 +6,28 @@
 <title>DAKI PAY</title>
 <style>
     * { box-sizing: border-box; }
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
-    padding: 20px;
-    background: #f5f7fa;
-    margin: 0;
-  }
- .container {
-    max-width: 500px;
-    margin: auto;
-    background: #fff;
-    padding: 24px;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  }
-  h2 {
-    color: #1a73e8;
-    margin-top: 0;
-    text-align: center;
-  }
-  label {
-    display: block;
-    margin-top: 12px;
-    font-weight: 600;
-    color: #333;
-    font-size: 14px;
-  }
-  select, input, button {
-    width: 100%;
-    padding: 14px;
-    margin: 8px 0;
-    border-radius: 8px;
-    border: 1px solid #ddd;
-    font-size: 16px;
-  }
-  button {
-    background: #1a73e8;
-    color: white;
-    border: none;
-    font-weight: 700;
-    cursor: pointer;
-    margin-top: 16px;
-  }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; padding: 20px; background: #0f172a; margin: 0; color:#f8fafc;}
+.container { max-width: 500px; margin: auto; background: #1e293b; padding: 24px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.4); }
+  h2 { color: #38bdf8; margin-top: 0; text-align: center; }
+  label { display: block; margin-top: 12px; font-weight: 600; color: #94a3b8; font-size: 14px; }
+  select, input, button { width: 100%; padding: 14px; margin: 8px 0; border-radius: 8px; border: 1px solid #334155; font-size: 16px; background:#0f172a; color:#f8fafc;}
+  select:focus, input:focus { outline:none; border-color:#38bdf8; }
+  button { background: #38bdf8; color: white; border: none; font-weight: 700; cursor: pointer; margin-top: 16px; }
   button:active { opacity: 0.8; }
- .btn-whatsapp {
-    background: #25D366;
-  }
- .hidden { display: none; }
- .payment-box {
-    background: #f0f7ff;
-    padding: 16px;
-    border-radius: 8px;
-    margin-top: 12px;
-    border-left: 4px solid #1a73e8;
-  }
- .receipt {
-    background: #1a1a1a;
-    color: #fff;
-    padding: 18px;
-    font-family: 'Courier New', monospace;
-    white-space: pre-wrap;
-    border-radius: 8px;
-    font-size: 13px;
-    overflow-x: auto;
-  }
- .total-box {
-    background: #e8f0fe;
-    padding: 12px;
-    border-radius: 8px;
-    margin: 12px 0;
-  }
+.btn-whatsapp { background: #25D366; }
+.hidden { display: none; }
+.payment-box { background: #1e40af20; padding: 16px; border-radius: 8px; margin-top: 12px; border-left: 4px solid #38bdf8; }
+.total-box { background: #1e40af20; padding: 12px; border-radius: 8px; margin: 12px 0; }
+.logo{text-align:center;margin-bottom:10px;}
+.logo img{width:100px;border-radius:12px;}
+.fee-info{font-size:13px;color:#94a3b8;margin-top:6px;}
 </style>
 </head>
 <body>
 <div class="container">
+  <div class="logo">
+    <img src="logo.png" alt="DakiPay Logo">
+  </div>
   <h2>DAKI PAY</h2>
 
   <!-- Passo 1: Escolher Serviço -->
@@ -88,20 +36,30 @@
     <select id="servico" onchange="mostrarOpcoes()">
       <option value="">-- Escolhe --</option>
       <option value="recarga">Recarga Telefónica</option>
+      <option value="tv">TV</option>
       <option value="credelec">Credelec</option>
       <option value="agua">Água</option>
-      <option value="tv">TV</option>
     </select>
+
+    <div id="opcoes-recarga" class="hidden">
+      <label>Operadora:</label>
+      <select id="op-recarga">
+        <option value="">-- Escolhe --</option>
+        <option value="Vodacom" data-fee="2.5">Vodacom</option>
+        <option value="Movitel" data-fee="3">Movitel</option>
+        <option value="Tmcel" data-fee="3.5">Tmcel</option>
+      </select>
+    </div>
 
     <div id="opcoes-tv" class="hidden">
       <label>Operadora TV:</label>
       <select id="tv-op">
         <option value="">-- Escolhe --</option>
+        <option value="ZAP">ZAP</option>
         <option value="GOtv">GOtv</option>
-        <option value="StarTimes">StarTimes</option>
         <option value="DStv">DStv</option>
+        <option value="StarTimes">StarTimes</option>
       </select>
-
       <label>Pacote:</label>
       <select id="tv-pacote">
         <option value="">-- Escolhe pacote --</option>
@@ -115,7 +73,8 @@
     <input type="tel" id="cliente-tel" placeholder="841234567">
 
     <label>Valor (MT):</label>
-    <input type="number" id="valor" placeholder="200">
+    <input type="number" id="valor" placeholder="200" min="10">
+    <div class="fee-info" id="feeInfo"></div>
 
     <button onclick="irParaPagamento()">Continuar</button>
   </div>
@@ -125,7 +84,7 @@
     <h3>Confirmar Pagamento</h3>
     <div class="total-box">
       <p>Valor base: <span id="valor-base"></span> MT</p>
-      <p>Taxa serviço 3%: <span id="taxa"></span> MT</p>
+      <p>Taxa serviço: <span id="taxa"></span> MT</p>
       <p style="font-size: 18px;"><b>Total: <span id="total"></span> MT</b></p>
     </div>
 
@@ -154,40 +113,117 @@
                   4. Usa referência: <b><span id="ref-emola"></span></b></p>
     </div>
 
-    <button onclick="gerarRecibo()">Gerar Recibo</button>
+    <button onclick="enviarPedido()">Enviar Pedido para WhatsApp</button>
   </div>
 
-  <!-- Passo 3: Recibo -->
+  <!-- Passo 3: Confirmação -->
   <div id="step3" class="hidden">
-    <div id="recibo" class="receipt"></div>
-    <button onclick="copiarRecibo()">📋 Copiar Recibo</button>
-    <button class="btn-whatsapp" id="btn-whatsapp">💬 Enviar no WhatsApp</button>
+    <div style="background:#22c55e;padding:15px;border-radius:10px;text-align:center;">
+      Pedido enviado! Vamos confirmar o pagamento e te enviar o recibo oficial no WhatsApp 835285053.
+    </div>
     <button style="background: #666;" onclick="novoPedido()">Novo Pedido</button>
   </div>
 </div>
 
 <script>
-const pacotesTV = {
-  GOtv: ["GOtv Lite - 150 MT", "GOtv Value - 300 MT", "GOtv Plus - 550 MT", "GOtv Max - 900 MT"],
-  StarTimes: ["Nova - 150 MT", "Basic - 350 MT", "Classic - 650 MT", "Smart - 950 MT"],
-  DStv: ["Access - 500 MT", "Family - 1000 MT", "Compact - 1800 MT"]
+// Taxas por operadora - ajusta aqui
+const TAXAS = {
+  Vodacom: 2.5,
+  Movitel: 3,
+  Tmcel: 3.5,
+  ZAP: 2,
+  GOtv: 3,
+  DStv: 2.5,
+  StarTimes: 3,
+  credelec: 2,
+  agua: 2
+};
+
+const PACOTES_TV = {
+  ZAP: [
+    {nome:"ZAP Mini", preco:250},
+    {nome:"ZAP Max", preco:600},
+    {nome:"ZAP Premium", preco:1200},
+    {nome:"ZAP Família", preco:900},
+    {nome:"ZAP Novela", preco:400}
+  ],
+  GOtv: [
+    {nome:"GOtv Lite", preco:150},
+    {nome:"GOtv Value", preco:300},
+    {nome:"GOtv Plus", preco:550},
+    {nome:"GOtv Max", preco:900}
+  ],
+  DStv: [
+    {nome:"Access", preco:500},
+    {nome:"Family", preco:1000},
+    {nome:"Compact", preco:1800},
+    {nome:"Compact Plus", preco:2400},
+    {nome:"Premium", preco:2800}
+  ],
+  StarTimes: [
+    {nome:"Nova", preco:150},
+    {nome:"Basic", preco:350},
+    {nome:"Classic", preco:650},
+    {nome:"Smart", preco:950}
+  ]
 };
 
 let pedido = {};
+const NUMERO_EMPRESA = '258835285053'; // Pedidos sempre caem aqui
 
 function mostrarOpcoes() {
   const servico = document.getElementById('servico').value;
-  document.getElementById('opcoes-tv').classList.toggle('hidden', servico!== 'tv');
+  document.getElementById('opcoes-tv').classList.toggle('hidden', servico!=='tv');
+  document.getElementById('opcoes-recarga').classList.toggle('hidden', servico!=='recarga');
 
   if (servico === 'tv') {
-    document.getElementById('tv-op').onchange = () => {
-      const op = document.getElementById('tv-op').value;
-      const pacoteSelect = document.getElementById('tv-pacote');
-      pacoteSelect.innerHTML = '<option value="">-- Escolhe pacote --</option>';
-      pacotesTV[op]?.forEach(p => {
-        pacoteSelect.innerHTML += `<option value="${p}">${p}</option>`;
-      });
-    };
+    document.getElementById('tv-op').onchange = atualizarPacotesTV;
+  }
+  atualizarTaxa();
+}
+
+document.getElementById('valor').addEventListener('input', atualizarTaxa);
+document.getElementById('op-recarga').addEventListener('change', atualizarTaxa);
+document.getElementById('tv-pacote').addEventListener('change', atualizarTaxa);
+
+function atualizarPacotesTV(){
+  const op = document.getElementById('tv-op').value;
+  const pacoteSelect = document.getElementById('tv-pacote');
+  pacoteSelect.innerHTML = '<option value="">-- Escolhe pacote --</option>';
+
+  const pacotes = PACOTES_TV[op] || [];
+  pacotes.forEach(p => {
+    pacoteSelect.innerHTML += `<option value="${p.nome}|${p.preco}">${p.nome} - ${p.preco} MT</option>`;
+  });
+  atualizarTaxa();
+}
+
+function atualizarTaxa(){
+  const servico = document.getElementById('servico').value;
+  let valor = parseFloat(document.getElementById('valor').value) || 0;
+  let taxaPercent = 3;
+
+  if(servico === 'recarga'){
+    const op = document.getElementById('op-recarga').value;
+    taxaPercent = TAXAS[op] || 3;
+  }
+  if(servico === 'tv'){
+    const pkg = document.getElementById('tv-pacote').value.split('|');
+    valor = parseFloat(pkg[1]) || 0;
+    const op = document.getElementById('tv-op').value;
+    taxaPercent = TAXAS[op] || 3;
+  }
+  if(['credelec','agua'].includes(servico)){
+    taxaPercent = TAXAS[servico] || 2;
+  }
+
+  const taxa = (valor * taxaPercent / 100).toFixed(2);
+  const total = (valor + parseFloat(taxa)).toFixed(2);
+
+  if(valor > 0){
+    document.getElementById('feeInfo').textContent = `Taxa ${taxaPercent}%: ${taxa} MT | Total: ${total} MT`;
+  } else {
+    document.getElementById('feeInfo').textContent = '';
   }
 }
 
@@ -195,16 +231,20 @@ function irParaPagamento() {
   pedido.servico = document.getElementById('servico').value;
   pedido.conta = document.getElementById('conta').value;
   pedido.telCliente = document.getElementById('cliente-tel').value;
-  pedido.valor = parseFloat(document.getElementById('valor').value);
 
   if (pedido.servico === 'tv') {
     const op = document.getElementById('tv-op').value;
-    const pacote = document.getElementById('tv-pacote').value;
-    if (!op ||!pacote) {
-      alert('Escolhe a operadora e o pacote de TV');
-      return;
-    }
-    pedido.servico = op + ' - ' + pacote;
+    const pkg = document.getElementById('tv-pacote').value.split('|');
+    if (!op ||!pkg[0]) { alert('Escolhe a operadora e o pacote de TV'); return; }
+    pedido.servico = `${op} - ${pkg[0]}`;
+    pedido.valor = parseFloat(pkg[1]);
+  } else if(pedido.servico === 'recarga'){
+    const op = document.getElementById('op-recarga').value;
+    if(!op){ alert('Escolhe a operadora'); return; }
+    pedido.servico = `Recarga ${op}`;
+    pedido.valor = parseFloat(document.getElementById('valor').value);
+  } else {
+    pedido.valor = parseFloat(document.getElementById('valor').value);
   }
 
   if (!pedido.servico ||!pedido.conta ||!pedido.valor ||!pedido.telCliente) {
@@ -212,7 +252,8 @@ function irParaPagamento() {
     return;
   }
 
-  pedido.taxa = (pedido.valor * 0.03).toFixed(2);
+  const taxaPercent = TAXAS[pedido.servico.split(' ')[1]] || TAXAS[pedido.servico.split(' - ')[0]] || 3;
+  pedido.taxa = (pedido.valor * taxaPercent / 100).toFixed(2);
   pedido.total = (pedido.valor + parseFloat(pedido.taxa)).toFixed(2);
   pedido.numRecibo = 'DP' + Math.floor(Math.random() * 9000000 + 1000000);
 
@@ -230,59 +271,29 @@ function irParaPagamento() {
 
 function mostrarPagamento() {
   const metodo = document.getElementById('metodo').value;
-  document.getElementById('pagamento-mkesh').classList.toggle('hidden', metodo!== 'mkesh');
-  document.getElementById('pagamento-emola').classList.toggle('hidden', metodo!== 'emola');
+  document.getElementById('pagamento-mkesh').classList.toggle('hidden', metodo!=='mkesh');
+  document.getElementById('pagamento-emola').classList.toggle('hidden', metodo!=='emola');
 }
 
-function gerarRecibo() {
-  const now = new Date();
-  const data = now.toLocaleDateString('pt-BR');
-  const hora = now.toLocaleTimeString('pt-BR');
+function enviarPedido() {
+  const metodo = document.getElementById('metodo').value;
+  if(!metodo){ alert('Escolhe o método de pagamento'); return; }
 
-  pedido.reciboTexto = `*DAKI PAY*
-Pagamentos sem sair de casa
+  let msg = `*Novo Pedido DAKI PAY*%0A`;
+  msg += `Serviço: ${pedido.servico}%0A`;
+  msg += `Conta/Número: ${pedido.conta}%0A`;
+  msg += `Valor: ${pedido.valor.toFixed(2)} MT%0A`;
+  msg += `Taxa: ${pedido.taxa} MT%0A`;
+  msg += `Total: ${pedido.total} MT%0A`;
+  msg += `Método: ${metodo.toUpperCase()}%0A`;
+  msg += `Cliente: ${pedido.telCliente}%0A`;
+  msg += `Ref: ${pedido.numRecibo}`;
 
-*RECIBO DE PAGAMENTO*
-
-*Nº DO RECIBO:* ${pedido.numRecibo}
-*DATA:* ${data}
-*HORA:* ${hora}
-
-*CLIENTE:* ${pedido.conta}
-*SERVIÇO:* ${pedido.servico}
-*CONTA / REFERÊNCIA:* ${pedido.conta}
-
-*VALOR BASE:* ${pedido.valor.toFixed(2)} MT
-*TAXA DE SERVIÇO (3%):* ${pedido.taxa} MT
-*TOTAL PAGO:* *${pedido.total} MT*
-
-*STATUS:* ✅ AGUARDANDO PAGAMENTO
-
-Transação realizada com segurança e confiabilidade.
-
-DAKI PAY
-Tel/WhatsApp: +258 835 285 053
-www.dakipay.co.mz`;
-
-  document.getElementById('recibo').innerText = pedido.reciboTexto;
-
-  // Configura botão WhatsApp
-  let telLimpo = pedido.telCliente.replace(/[^0-9]/g, '');
-  if (telLimpo.startsWith('0')) telLimpo = telLimpo.substring(1);
-  const telFormatado = telLimpo.startsWith('258')? telLimpo : '258' + telLimpo;
-  const msgEncoded = encodeURIComponent(pedido.reciboTexto);
-
-  document.getElementById('btn-whatsapp').onclick = () => {
-    window.open(`https://wa.me/${telFormatado}?text=${msgEncoded}`, '_blank');
-  };
+  // Pedido sempre vai para o 83
+  window.open(`https://wa.me/${NUMERO_EMPRESA}?text=${msg}`, '_blank');
 
   document.getElementById('step2').classList.add('hidden');
   document.getElementById('step3').classList.remove('hidden');
-}
-
-function copiarRecibo() {
-  navigator.clipboard.writeText(pedido.reciboTexto);
-  alert('Recibo copiado para a área de transferência!');
 }
 
 function novoPedido() {
@@ -293,6 +304,8 @@ function novoPedido() {
   document.getElementById('cliente-tel').value = '';
   document.getElementById('valor').value = '';
   document.getElementById('opcoes-tv').classList.add('hidden');
+  document.getElementById('opcoes-recarga').classList.add('hidden');
+  document.getElementById('feeInfo').textContent = '';
 }
 </script>
 </body>
