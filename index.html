@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DAKI PAY</title>
+<style>
+    * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+    padding: 20px;
+    background: #f5f7fa;
+    margin: 0;
+  }
+ .container {
+    max-width: 500px;
+    margin: auto;
+    background: #fff;
+    padding: 24px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+  h2 {
+    color: #1a73e8;
+    margin-top: 0;
+    text-align: center;
+  }
+  label {
+    display: block;
+    margin-top: 12px;
+    font-weight: 600;
+    color: #333;
+    font-size: 14px;
+  }
+  select, input, button {
+    width: 100%;
+    padding: 14px;
+    margin: 8px 0;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    font-size: 16px;
+  }
+  button {
+    background: #1a73e8;
+    color: white;
+    border: none;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 16px;
+  }
+  button:active { opacity: 0.8; }
+ .btn-whatsapp {
+    background: #25D366;
+  }
+ .hidden { display: none; }
+ .payment-box {
+    background: #f0f7ff;
+    padding: 16px;
+    border-radius: 8px;
+    margin-top: 12px;
+    border-left: 4px solid #1a73e8;
+  }
+ .receipt {
+    background: #1a1a1a;
+    color: #fff;
+    padding: 18px;
+    font-family: 'Courier New', monospace;
+    white-space: pre-wrap;
+    border-radius: 8px;
+    font-size: 13px;
+    overflow-x: auto;
+  }
+ .total-box {
+    background: #e8f0fe;
+    padding: 12px;
+    border-radius: 8px;
+    margin: 12px 0;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h2>DAKI PAY</h2>
+
+  <!-- Passo 1: Escolher Serviço -->
+  <div id="step1">
+    <label>Serviço:</label>
+    <select id="servico" onchange="mostrarOpcoes()">
+      <option value="">-- Escolhe --</option>
+      <option value="recarga">Recarga Telefónica</option>
+      <option value="credelec">Credelec</option>
+      <option value="agua">Água</option>
+      <option value="tv">TV</option>
+    </select>
+
+    <div id="opcoes-tv" class="hidden">
+      <label>Operadora TV:</label>
+      <select id="tv-op">
+        <option value="">-- Escolhe --</option>
+        <option value="GOtv">GOtv</option>
+        <option value="StarTimes">StarTimes</option>
+        <option value="DStv">DStv</option>
+      </select>
+
+      <label>Pacote:</label>
+      <select id="tv-pacote">
+        <option value="">-- Escolhe pacote --</option>
+      </select>
+    </div>
+
+    <label>Número/Conta:</label>
+    <input type="text" id="conta" placeholder="84XXXXXXX ou Nº Conta">
+
+    <label>WhatsApp do Cliente:</label>
+    <input type="tel" id="cliente-tel" placeholder="841234567">
+
+    <label>Valor (MT):</label>
+    <input type="number" id="valor" placeholder="200">
+
+    <button onclick="irParaPagamento()">Continuar</button>
+  </div>
+
+  <!-- Passo 2: Pagamento -->
+  <div id="step2" class="hidden">
+    <h3>Confirmar Pagamento</h3>
+    <div class="total-box">
+      <p>Valor base: <span id="valor-base"></span> MT</p>
+      <p>Taxa serviço 3%: <span id="taxa"></span> MT</p>
+      <p style="font-size: 18px;"><b>Total: <span id="total"></span> MT</b></p>
+    </div>
+
+    <label>Método de Pagamento:</label>
+    <select id="metodo" onchange="mostrarPagamento()">
+      <option value="">-- Escolhe --</option>
+      <option value="mkesh">M-Kesh</option>
+      <option value="emola">E-Mola</option>
+    </select>
+
+    <div id="pagamento-mkesh" class="payment-box hidden">
+      <p>Envia <b><span id="total-mkesh"></span> MT</b> para:</p>
+      <p>📱 <b>835 285 053</b><br>Nome: Tomocene Fernando Frio</p>
+      <p>1. Abre M-Kesh > Transferir dinheiro<br>
+                  2. Cola o número 835285053<br>
+                  3. Confirma o nome e mete o valor<br>
+                  4. Usa referência: <b><span id="ref-mkesh"></span></b></p>
+    </div>
+
+    <div id="pagamento-emola" class="payment-box hidden">
+      <p>Envia <b><span id="total-emola"></span> MT</b> para:</p>
+      <p>📱 <b>877 767 831</b><br>Nome: Raiva Evaristo Cossa</p>
+      <p>1. Abre E-Mola > Enviar dinheiro<br>
+                  2. Cola o número 877767831<br>
+                  3. Confirma o nome e mete o valor<br>
+                  4. Usa referência: <b><span id="ref-emola"></span></b></p>
+    </div>
+
+    <button onclick="gerarRecibo()">Gerar Recibo</button>
+  </div>
+
+  <!-- Passo 3: Recibo -->
+  <div id="step3" class="hidden">
+    <div id="recibo" class="receipt"></div>
+    <button onclick="copiarRecibo()">📋 Copiar Recibo</button>
+    <button class="btn-whatsapp" id="btn-whatsapp">💬 Enviar no WhatsApp</button>
+    <button style="background: #666;" onclick="novoPedido()">Novo Pedido</button>
+  </div>
+</div>
+
+<script>
+const pacotesTV = {
+  GOtv: ["GOtv Lite - 150 MT", "GOtv Value - 300 MT", "GOtv Plus - 550 MT", "GOtv Max - 900 MT"],
+  StarTimes: ["Nova - 150 MT", "Basic - 350 MT", "Classic - 650 MT", "Smart - 950 MT"],
+  DStv: ["Access - 500 MT", "Family - 1000 MT", "Compact - 1800 MT"]
+};
+
+let pedido = {};
+
+function mostrarOpcoes() {
+  const servico = document.getElementById('servico').value;
+  document.getElementById('opcoes-tv').classList.toggle('hidden', servico!== 'tv');
+
+  if (servico === 'tv') {
+    document.getElementById('tv-op').onchange = () => {
+      const op = document.getElementById('tv-op').value;
+      const pacoteSelect = document.getElementById('tv-pacote');
+      pacoteSelect.innerHTML = '<option value="">-- Escolhe pacote --</option>';
+      pacotesTV[op]?.forEach(p => {
+        pacoteSelect.innerHTML += `<option value="${p}">${p}</option>`;
+      });
+    };
+  }
+}
+
+function irParaPagamento() {
+  pedido.servico = document.getElementById('servico').value;
+  pedido.conta = document.getElementById('conta').value;
+  pedido.telCliente = document.getElementById('cliente-tel').value;
+  pedido.valor = parseFloat(document.getElementById('valor').value);
+
+  if (pedido.servico === 'tv') {
+    const op = document.getElementById('tv-op').value;
+    const pacote = document.getElementById('tv-pacote').value;
+    if (!op ||!pacote) {
+      alert('Escolhe a operadora e o pacote de TV');
+      return;
+    }
+    pedido.servico = op + ' - ' + pacote;
+  }
+
+  if (!pedido.servico ||!pedido.conta ||!pedido.valor ||!pedido.telCliente) {
+    alert('Preenche todos os campos');
+    return;
+  }
+
+  pedido.taxa = (pedido.valor * 0.03).toFixed(2);
+  pedido.total = (pedido.valor + parseFloat(pedido.taxa)).toFixed(2);
+  pedido.numRecibo = 'DP' + Math.floor(Math.random() * 9000000 + 1000000);
+
+  document.getElementById('valor-base').innerText = pedido.valor.toFixed(2);
+  document.getElementById('taxa').innerText = pedido.taxa;
+  document.getElementById('total').innerText = pedido.total;
+  document.getElementById('total-mkesh').innerText = pedido.total;
+  document.getElementById('total-emola').innerText = pedido.total;
+  document.getElementById('ref-mkesh').innerText = pedido.numRecibo;
+  document.getElementById('ref-emola').innerText = pedido.numRecibo;
+
+  document.getElementById('step1').classList.add('hidden');
+  document.getElementById('step2').classList.remove('hidden');
+}
+
+function mostrarPagamento() {
+  const metodo = document.getElementById('metodo').value;
+  document.getElementById('pagamento-mkesh').classList.toggle('hidden', metodo!== 'mkesh');
+  document.getElementById('pagamento-emola').classList.toggle('hidden', metodo!== 'emola');
+}
+
+function gerarRecibo() {
+  const now = new Date();
+  const data = now.toLocaleDateString('pt-BR');
+  const hora = now.toLocaleTimeString('pt-BR');
+
+  pedido.reciboTexto = `*DAKI PAY*
+Pagamentos sem sair de casa
+
+*RECIBO DE PAGAMENTO*
+
+*Nº DO RECIBO:* ${pedido.numRecibo}
+*DATA:* ${data}
+*HORA:* ${hora}
+
+*CLIENTE:* ${pedido.conta}
+*SERVIÇO:* ${pedido.servico}
+*CONTA / REFERÊNCIA:* ${pedido.conta}
+
+*VALOR BASE:* ${pedido.valor.toFixed(2)} MT
+*TAXA DE SERVIÇO (3%):* ${pedido.taxa} MT
+*TOTAL PAGO:* *${pedido.total} MT*
+
+*STATUS:* ✅ AGUARDANDO PAGAMENTO
+
+Transação realizada com segurança e confiabilidade.
+
+DAKI PAY
+Tel/WhatsApp: +258 835 285 053
+www.dakipay.co.mz`;
+
+  document.getElementById('recibo').innerText = pedido.reciboTexto;
+
+  // Configura botão WhatsApp
+  let telLimpo = pedido.telCliente.replace(/[^0-9]/g, '');
+  if (telLimpo.startsWith('0')) telLimpo = telLimpo.substring(1);
+  const telFormatado = telLimpo.startsWith('258')? telLimpo : '258' + telLimpo;
+  const msgEncoded = encodeURIComponent(pedido.reciboTexto);
+
+  document.getElementById('btn-whatsapp').onclick = () => {
+    window.open(`https://wa.me/${telFormatado}?text=${msgEncoded}`, '_blank');
+  };
+
+  document.getElementById('step2').classList.add('hidden');
+  document.getElementById('step3').classList.remove('hidden');
+}
+
+function copiarRecibo() {
+  navigator.clipboard.writeText(pedido.reciboTexto);
+  alert('Recibo copiado para a área de transferência!');
+}
+
+function novoPedido() {
+  document.getElementById('step3').classList.add('hidden');
+  document.getElementById('step1').classList.remove('hidden');
+  document.getElementById('servico').value = '';
+  document.getElementById('conta').value = '';
+  document.getElementById('cliente-tel').value = '';
+  document.getElementById('valor').value = '';
+  document.getElementById('opcoes-tv').classList.add('hidden');
+}
+</script>
+</body>
+</html>
