@@ -1,125 +1,181 @@
 <!DOCTYPE html>
-<html lang="pt-MZ">
+<html lang="pt">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DakiPay</title>
+<title>DAKI PAY</title>
 <style>
-:root {
-  --bg: #0f172a;
-  --card: #1e293b;
-  --primary: #22c55e;
-  --text: #f8fafc;
-  --muted: #94a3b8;
+* { box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+  padding: 20px;
+  background: #0f172a;
+  margin: 0;
+  color:#f8fafc;
 }
-* { margin: 0; padding: 0; box-sizing: border-box; font-family: system-ui, sans-serif; }
-body { background: var(--bg); color: var(--text); padding: 20px; }
-.container { max-width: 500px; margin: 0 auto; }
-.logo { text-align: center; margin-bottom: 20px; }
-.logo img { 
-  width: 80px; 
-  height: 80px; 
-  border-radius: 50%; 
-  animation: girar 4s linear infinite; 
+.container {
+  max-width: 500px;
+  margin: auto;
+  background: #1e293b;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
 }
-@keyframes girar { 
-  from { transform: rotate(0deg); } 
-  to { transform: rotate(360deg); } 
+
+/* Cabeçalho com logo + título + ícone cartão */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 8px;
 }
-h2 { text-align: center; margin-bottom: 20px; color: var(--primary); }
-.card { background: var(--card); padding: 20px; border-radius: 16px; margin-bottom: 15px; }
-.form-group { margin-bottom: 15px; }
-.form-label { display: block; margin-bottom: 6px; font-size: 14px; color: var(--muted); }
-.form-input, select { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #334155; background: #0f172a; color: var(--text); font-size: 16px; }
-.btn { width: 100%; padding: 14px; border: none; border-radius: 10px; background: var(--primary); color: #0f172a; font-weight: bold; font-size: 16px; cursor: pointer; }
-.btn:hover { opacity: 0.9; }
-.receipt { display: none; background: #fff; color: #000; padding: 20px; border-radius: 16px; }
-.receipt-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; }
+.logo img{
+  width: 70px;
+  height: 70px;
+  border-radius: 12px;
+}
+h2 {
+  color: #38bdf8;
+  margin: 0;
+  font-size: 28px;
+  font-weight: 800;
+}
+.card-icon {
+  width: 40px;
+  height: 40px;
+}
+
+/* Subtítulo */
+.subtitle {
+  text-align: center;
+  color: #94a3b8;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin-top: 12px;
+  font-weight: 600;
+  color: #94a3b8;
+  font-size: 14px;
+}
+select, input, button {
+  width: 100%;
+  padding: 14px;
+  margin: 8px 0;
+  border-radius: 8px;
+  border: 1px solid #334155;
+  font-size: 16px;
+  background:#0f172a;
+  color:#f8fafc;
+}
+select:focus, input:focus {
+  outline:none;
+  border-color:#38bdf8;
+}
+button {
+  background: #38bdf8;
+  color: white;
+  border: none;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 16px;
+}
+button:active { opacity: 0.8; }
+.hidden { display: none; }
+.payment-box {
+  background: #1e40af20;
+  padding: 16px;
+  border-radius: 8px;
+  margin-top: 12px;
+  border-left: 4px solid #38bdf8;
+}
+.total-box {
+  background: #1e40af20;
+  padding: 12px;
+  border-radius: 8px;
+  margin: 12px 0;
+}
+.fee-info{font-size:13px;color:#94a3b8;margin-top:6px;}
 </style>
 </head>
 <body>
 <div class="container">
-  <div class="logo">
-    <img src="logo.png" alt="DakiPay Logo">
-  </div>
-  <h2>DAKI PAY</h2>
-
-  <div class="card">
-    <form id="orderForm">
-      <div class="form-group">
-        <label class="form-label" for="customerName">Nome do Cliente</label>
-        <input id="customerName" type="text" class="form-input" placeholder="Ex: João Silva" required>
-      </div>
-
-      <div class="form-group">
-        <label class="form-label" for="service">Serviço</label>
-        <select id="service" required>
-          <option value="">Seleciona</option>
-          <option value="M-Pesa">M-Pesa</option>
-          <option value="e-Mola">e-Mola</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label class="form-label" for="account">Número/Conta</label>
-        <input id="account" type="text" class="form-input" placeholder="84xxxxxxx" required>
-      </div>
-
-      <div class="form-group">
-        <label class="form-label" for="amount">Valor em MT</label>
-        <input id="amount" type="number" class="form-input" placeholder="10" min="10" required>
-      </div>
-
-      <button type="submit" class="btn">Gerar Pedido</button>
-    </form>
-  </div>
-
-  <div id="receipt" class="receipt">
-    <div style="text-align: center; margin-bottom: 15px;">
-      <img src="logo.png" style="width: 60px; height: 60px; border-radius: 50%;">
-      <h3>DakiPay</h3>
-      <p style="font-size: 12px;">Recibo de Pagamento</p>
+  
+  <!-- Cabeçalho -->
+  <div class="header">
+    <div class="logo">
+      <img src="logo.png" alt="DakiPay Logo">
     </div>
-    <div id="receiptDetails"></div>
-    <button onclick="window.print()" class="btn" style="margin-top: 15px;">Imprimir</button>
+    <h2>DAKI PAY</h2>
+    <!-- Ícone de cartão SVG -->
+    <svg class="card-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="2" y="5" width="20" height="14" rx="2" stroke="#38bdf8" stroke-width="2"/>
+      <path d="M2 10H22" stroke="#38bdf8" stroke-width="2"/>
+      <circle cx="18" cy="15" r="1.5" fill="#38bdf8"/>
+      <circle cx="15" cy="15" r="1.5" fill="#38bdf8"/>
+    </svg>
   </div>
-</div>
 
-<script>
-document.getElementById('orderForm').addEventListener('submit', function(e) {
-  e.preventDefault();
-  
-  const customerName = document.getElementById('customerName').value;
-  const service = document.getElementById('service').value;
-  const account = document.getElementById('account').value;
-  const amount = parseFloat(document.getElementById('amount').value);
-  
-  let fee;
-  if (amount === 10) {
-    fee = 1;
-  } else {
-    fee = amount * 0.03;
-    if (fee < 1) fee = 1;
-  }
-  
-  const total = amount + fee;
-  const ref = 'DKP' + Date.now().toString().slice(-6);
-  
-  const details = `
-    <div class="receipt-row"><span>Cliente:</span><span>${customerName}</span></div>
-    <div class="receipt-row"><span>Serviço:</span><span>${service}</span></div>
-    <div class="receipt-row"><span>Conta:</span><span>${account}</span></div>
-    <div class="receipt-row"><span>Valor:</span><span>${amount} MT</span></div>
-    <div class="receipt-row"><span>Taxa:</span><span>${fee.toFixed(2)} MT</span></div>
-    <div class="receipt-row"><span><strong>Total:</strong></span><span><strong>${total.toFixed(2)} MT</strong></span></div>
-    <div class="receipt-row"><span>Ref:</span><span>${ref}</span></div>
-    <div class="receipt-row"><span>Data:</span><span>${new Date().toLocaleString('pt-MZ')}</span></div>
-  `;
-  
-  document.getElementById('receiptDetails').innerHTML = details;
-  document.getElementById('receipt').style.display = 'block';
-  document.getElementById('receipt').scrollIntoView({ behavior: 'smooth' });
-});
-</script>
-</body>
-</html>
+  <!-- Subtítulo em maiúsculas -->
+  <div class="subtitle">PAGAMENTOS SEM SAIR DE CASA</div>
+
+  <!-- Passo 1: Escolher Serviço -->
+  <div id="step1">
+    <label>Nome do Cliente:</label>
+    <input type="text" id="nome-cliente" placeholder="Ex: João Silva" required>
+
+    <label>Serviço:</label>
+    <select id="servico" onchange="mostrarOpcoes()">
+      <option value="">-- Escolhe --</option>
+      <option value="recarga">Recarga Telefónica</option>
+      <option value="tv">TV</option>
+      <option value="credelec">Credelec</option>
+      <option value="agua">Água</option>
+    </select>
+
+    <div id="opcoes-recarga" class="hidden">
+      <label>Operadora:</label>
+      <select id="op-recarga">
+        <option value="">-- Escolhe --</option>
+        <option value="Vodacom" data-fee="2.5">Vodacom</option>
+        <option value="Movitel" data-fee="3">Movitel</option>
+        <option value="Tmcel" data-fee="3.5">Tmcel</option>
+      </select>
+    </div>
+
+    <div id="opcoes-tv" class="hidden">
+      <label>Operadora TV:</label>
+      <select id="tv-op">
+        <option value="">-- Escolhe --</option>
+        <option value="ZAP">ZAP</option>
+        <option value="GOtv">GOtv</option>
+        <option value="DStv">DStv</option>
+        <option value="StarTimes">StarTimes</option>
+      </select>
+      <label>Pacote:</label>
+      <select id="tv-pacote">
+        <option value="">-- Escolhe pacote --</option>
+      </select>
+    </div>
+
+    <label>Número/Conta:</label>
+    <input type="text" id="conta" placeholder="84XXXXXXX ou Nº Conta">
+
+    <label>WhatsApp do Cliente:</label>
+    <input type="tel" id="cliente-tel" placeholder="841234567">
+
+    <label>Valor (MT):</label>
+    <input type="number" id="valor" placeholder="200" min="10">
+
+    <div class="fee-info" id="feeInfo"></div>
+    <button onclick="irParaPagamento()">Continuar</button>
+  </div>
+
+  <!-- O resto do teu código continua igual daqui pra baixo -->
+  <!-- Passo 2, Passo 3 e <script>... -->
