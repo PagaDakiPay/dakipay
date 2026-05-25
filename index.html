@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DAKI PAY</title>
+<title>PagaDaki Services</title>
 <style>
 * { box-sizing: border-box; }
 body {
@@ -22,7 +22,6 @@ body {
   box-shadow: 0 4px 20px rgba(0,0,0,0.4);
 }
 
-/* Cabeçalho com logo + título + ícone cartão */
 .header {
   display: flex;
   align-items: center;
@@ -36,9 +35,9 @@ body {
   border-radius: 12px;
 }
 h2 {
-  color: #38bdf8;
+  color: #facc15;
   margin: 0;
-  font-size: 28px;
+  font-size: 26px;
   font-weight: 800;
 }
 .card-icon {
@@ -46,10 +45,9 @@ h2 {
   height: 40px;
 }
 
-/* Subtítulo */
 .subtitle {
   text-align: center;
-  color: #94a3b8;
+  color: #facc15;
   font-size: 14px;
   font-weight: 700;
   letter-spacing: 1px;
@@ -76,11 +74,11 @@ select, input, button {
 }
 select:focus, input:focus {
   outline:none;
-  border-color:#38bdf8;
+  border-color:#facc15;
 }
 button {
-  background: #38bdf8;
-  color: white;
+  background: #facc15;
+  color: #0f172a;
   border: none;
   font-weight: 700;
   cursor: pointer;
@@ -89,46 +87,47 @@ button {
 button:active { opacity: 0.8; }
 .hidden { display: none; }
 .payment-box {
-  background: #1e40af20;
+  background: #facc1520;
   padding: 16px;
   border-radius: 8px;
   margin-top: 12px;
-  border-left: 4px solid #38bdf8;
+  border-left: 4px solid #facc15;
 }
 .total-box {
-  background: #1e40af20;
+  background: #facc1520;
   padding: 12px;
   border-radius: 8px;
   margin: 12px 0;
 }
-.fee-info{font-size:13px;color:#94a3b8;margin-top:6px;}
+.fee-info{font-size:13px;color:#facc15;margin-top:6px;font-weight:600;}
+.warning{font-size:13px;color:#f87171;margin-top:8px;text-align:center;font-weight:600;}
+.number-bold{font-weight:700;color:#facc15;font-size:18px;}
 </style>
 </head>
 <body>
 <div class="container">
-  
-  <!-- Cabeçalho -->
+
   <div class="header">
     <div class="logo">
-      <img src="logo.png" alt="DakiPay Logo">
+      <img src="logo.png" alt="PagaDaki Logo">
     </div>
-    <h2>DAKI PAY</h2>
-    <!-- Ícone de cartão SVG -->
+    <h2>PagaDaki Services</h2>
     <svg class="card-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="2" y="5" width="20" height="14" rx="2" stroke="#38bdf8" stroke-width="2"/>
-      <path d="M2 10H22" stroke="#38bdf8" stroke-width="2"/>
-      <circle cx="18" cy="15" r="1.5" fill="#38bdf8"/>
-      <circle cx="15" cy="15" r="1.5" fill="#38bdf8"/>
+      <rect x="2" y="5" width="20" height="14" rx="2" stroke="#facc15" stroke-width="2"/>
+      <path d="M2 10H22" stroke="#facc15" stroke-width="2"/>
+      <circle cx="18" cy="15" r="1.5" fill="#facc15"/>
+      <circle cx="15" cy="15" r="1.5" fill="#facc15"/>
     </svg>
   </div>
 
-  <!-- Subtítulo em maiúsculas -->
   <div class="subtitle">PAGAMENTOS SEM SAIR DE CASA</div>
 
-  <!-- Passo 1: Escolher Serviço -->
   <div id="step1">
     <label>Nome do Cliente:</label>
     <input type="text" id="nome-cliente" placeholder="Ex: João Silva" required>
+
+    <label>Número do Cliente:</label>
+    <input type="tel" id="cliente-tel" placeholder="841234567" required>
 
     <label>Serviço:</label>
     <select id="servico" onchange="mostrarOpcoes()">
@@ -139,23 +138,25 @@ button:active { opacity: 0.8; }
       <option value="agua">Água</option>
     </select>
 
+    <!-- Recarga -->
     <div id="opcoes-recarga" class="hidden">
-      <label>Operadora:</label>
+      <label>Rede:</label>
       <select id="op-recarga">
         <option value="">-- Escolhe --</option>
-        <option value="Vodacom" data-fee="2.5">Vodacom</option>
-        <option value="Movitel" data-fee="3">Movitel</option>
-        <option value="Tmcel" data-fee="3.5">Tmcel</option>
+        <option value="Vodacom">Vodacom</option>
+        <option value="Movitel">Movitel</option>
+        <option value="Tmcel">Tmcel</option>
       </select>
     </div>
 
+    <!-- TV -->
     <div id="opcoes-tv" class="hidden">
       <label>Operadora TV:</label>
       <select id="tv-op">
         <option value="">-- Escolhe --</option>
-        <option value="ZAP">ZAP</option>
         <option value="GOtv">GOtv</option>
         <option value="DStv">DStv</option>
+        <option value="ZAP">ZAP</option>
         <option value="StarTimes">StarTimes</option>
       </select>
       <label>Pacote:</label>
@@ -167,15 +168,263 @@ button:active { opacity: 0.8; }
     <label>Número/Conta:</label>
     <input type="text" id="conta" placeholder="84XXXXXXX ou Nº Conta">
 
-    <label>WhatsApp do Cliente:</label>
-    <input type="tel" id="cliente-tel" placeholder="841234567">
-
     <label>Valor (MT):</label>
-    <input type="number" id="valor" placeholder="200" min="10">
+    <input type="number" id="valor" placeholder="Ex: 50" min="10">
 
     <div class="fee-info" id="feeInfo"></div>
     <button onclick="irParaPagamento()">Continuar</button>
   </div>
 
-  <!-- O resto do teu código continua igual daqui pra baixo -->
-  <!-- Passo 2, Passo 3 e <script>... -->
+  <!-- Passo 2: Pagamento -->
+  <div id="step2" class="hidden">
+    <h3>Confirmar Pagamento</h3>
+    <div class="total-box">
+      <p>Cliente: <b><span id="nome-cliente-show"></span></b></p>
+      <p>Serviço: <span id="servico-show"></span></p>
+      <p>Conta: <span id="conta-show"></span></p>
+      <p>Valor base: <span id="valor-base"></span> MT</p>
+      <p>Taxa serviço: <span id="taxa"></span> MT</p>
+      <p style="font-size: 18px;"><b>Total a pagar: <span id="total"></span> MT</b></p>
+    </div>
+
+    <label>Método de Pagamento:</label>
+    <select id="metodo" onchange="mostrarPagamento()">
+      <option value="">-- Escolhe --</option>
+      <option value="mkesh">M-Kesh</option>
+      <option value="emola">E-Mola</option>
+    </select>
+
+    <div id="pagamento-mkesh" class="payment-box hidden">
+      <p>Envia <b><span id="total-mkesh"></span> MT</b> para:</p>
+      <p>📱 <span class="number-bold">835 285 053</span><br>
+      <b>Nome: Tomocene Fernando Frio</b></p>
+      <p><b>Instruções M-Kesh:</b><br>
+      1. Abre M-Kesh<br>
+      2. Transferir dinheiro<br>
+      3. Cola o número <b>835285053</b><br>
+      4. Confirma o nome e mete o valor <b><span id="total-mkesh2"></span> MT</b><br>
+      5. Usa referência: <b><span id="ref-mkesh"></span></b></p>
+    </div>
+
+    <div id="pagamento-emola" class="payment-box hidden">
+      <p>Envia <b><span id="total-emola"></span> MT</b> para:</p>
+      <p>📱 <span class="number-bold">877 767 831</span><br>
+      <b>Nome: Raiva Evaristo Cossa</b></p>
+      <p><b>Instruções E-Mola:</b><br>
+      1. Digita *150#<br>
+      2. Escolhe Transferir dinheiro<br>
+      3. Cola o número <b>877767831</b><br>
+      4. Confirma o nome e mete o valor <b><span id="total-emola2"></span> MT</b><br>
+      5. Usa referência: <b><span id="ref-emola"></span></b></p>
+    </div>
+
+    <p class="warning">Confirme os dados antes do pagamento</p>
+    <button onclick="enviarPedido()">Fazer Pedido - Enviar para WhatsApp</button>
+  </div>
+
+  <!-- Passo 3 -->
+  <div id="step3" class="hidden">
+    <div style="background:#22c55e;padding:15px;border-radius:10px;text-align:center;">
+      Pedido enviado! Vamos confirmar o pagamento e te enviar o recibo oficial no WhatsApp 835285053.
+    </div>
+    <button style="background: #666;color:#fff;" onclick="novoPedido()">Novo Pedido</button>
+  </div>
+</div>
+
+<script>
+const PACOTES_TV = {
+  GOtv: [{nome:"GOtv Lite", preco:150},{nome:"GOtv Value", preco:300},{nome:"GOtv Plus", preco:550},{nome:"GOtv Max", preco:900}],
+  DStv: [{nome:"Access", preco:500},{nome:"Family", preco:1000},{nome:"Compact", preco:1800},{nome:"Compact Plus", preco:2400},{nome:"Premium", preco:2800}],
+  ZAP: [{nome:"ZAP Mini", preco:250},{nome:"ZAP Max", preco:600},{nome:"ZAP Premium", preco:1200},{nome:"ZAP Família", preco:900},{nome:"ZAP Novela", preco:400}],
+  StarTimes: [{nome:"Nova", preco:150},{nome:"Basic", preco:350},{nome:"Classic", preco:650},{nome:"Smart", preco:950}]
+};
+
+let pedido = {};
+const NUMERO_EMPRESA = '258835285053';
+
+function mostrarOpcoes() {
+  const servico = document.getElementById('servico').value;
+  document.getElementById('opcoes-tv').classList.toggle('hidden', servico!=='tv');
+  document.getElementById('opcoes-recarga').classList.toggle('hidden', servico!=='recarga');
+  if (servico === 'tv') {
+    document.getElementById('tv-op').onchange = atualizarPacotesTV;
+  }
+  atualizarTaxa();
+}
+
+document.getElementById('valor').addEventListener('input', atualizarTaxa);
+document.getElementById('op-recarga').addEventListener('change', atualizarTaxa);
+document.getElementById('tv-pacote').addEventListener('change', atualizarTaxa);
+
+function atualizarPacotesTV(){
+  const op = document.getElementById('tv-op').value;
+  const pacoteSelect = document.getElementById('tv-pacote');
+  pacoteSelect.innerHTML = '<option value="">-- Escolhe pacote --</option>';
+  const pacotes = PACOTES_TV[op] || [];
+  pacotes.forEach(p => {
+    pacoteSelect.innerHTML += `<option value="${p.nome}|${p.preco}">${p.nome} - ${p.preco} MT</option>`;
+  });
+  atualizarTaxa();
+}
+
+function calcularTaxaRecarga(valor){
+  if(valor >= 10 && valor <= 20) return 1;
+  if(valor >= 30 && valor <= 60) return 3;
+  if(valor >= 70 && valor <= 90) return 4;
+  if(valor >= 100) return valor * 0.03;
+  return 0;
+}
+
+function calcularTaxaTV(valor){
+  if(valor >= 100 && valor <= 799) return valor * 0.03;
+  if(valor >= 800) return valor * 0.05;
+  return 0;
+}
+
+function calcularTaxaCredelec(valor){
+  if(valor >= 10 && valor <= 499) return calcularTaxaRecarga(valor);
+  if(valor >= 500) return valor * 0.05;
+  return 0;
+}
+
+function calcularTaxaAgua(valor){
+  if(valor >= 50 && valor <= 499) return valor * 0.03;
+  if(valor >= 500) return valor * 0.05;
+  return 0;
+}
+
+function atualizarTaxa(){
+  const servico = document.getElementById('servico').value;
+  let valor = parseFloat(document.getElementById('valor').value) || 0;
+  let taxa = 0;
+
+  if(servico === 'recarga'){
+    taxa = calcularTaxaRecarga(valor);
+  }
+  if(servico === 'tv'){
+    const pkg = document.getElementById('tv-pacote').value.split('|');
+    valor = parseFloat(pkg[1]) || 0;
+    taxa = calcularTaxaTV(valor);
+  }
+  if(servico === 'credelec'){
+    taxa = calcularTaxaCredelec(valor);
+  }
+  if(servico === 'agua'){
+    taxa = calcularTaxaAgua(valor);
+  }
+
+  const total = valor + taxa;
+  if(valor > 0){
+    document.getElementById('feeInfo').textContent = `${valor.toFixed(2)} MT + taxa ${taxa.toFixed(2)} MT = Total ${total.toFixed(2)} MT`;
+  } else {
+    document.getElementById('feeInfo').textContent = '';
+  }
+}
+
+function irParaPagamento() {
+  pedido.nomeCliente = document.getElementById('nome-cliente').value;
+  pedido.telCliente = document.getElementById('cliente-tel').value;
+  pedido.servico = document.getElementById('servico').value;
+  pedido.conta = document.getElementById('conta').value;
+
+  if (pedido.servico === 'tv') {
+    const op = document.getElementById('tv-op').value;
+    const pkg = document.getElementById('tv-pacote').value.split('|');
+    if (!op ||!pkg[0]) {
+      alert('Escolhe a operadora e o pacote de TV');
+      return;
+    }
+    pedido.servicoNome = `${op} - ${pkg[0]}`;
+    pedido.valor = parseFloat(pkg[1]);
+    pedido.taxa = calcularTaxaTV(pedido.valor);
+  } else if(pedido.servico === 'recarga'){
+    const op = document.getElementById('op-recarga').value;
+    if(!op){
+      alert('Escolhe a rede');
+      return;
+    }
+    pedido.servicoNome = `Recarga ${op}`;
+    pedido.valor = parseFloat(document.getElementById('valor').value);
+    pedido.taxa = calcularTaxaRecarga(pedido.valor);
+  } else if(pedido.servico === 'credelec'){
+    pedido.valor = parseFloat(document.getElementById('valor').value);
+    pedido.servicoNome = 'Credelec';
+    pedido.taxa = calcularTaxaCredelec(pedido.valor);
+  } else if(pedido.servico === 'agua'){
+    pedido.valor = parseFloat(document.getElementById('valor').value);
+    pedido.servicoNome = 'Água';
+    pedido.taxa = calcularTaxaAgua(pedido.valor);
+  } else {
+    alert('Escolhe o serviço');
+    return;
+  }
+
+  if (!pedido.nomeCliente ||!pedido.telCliente ||!pedido.conta ||!pedido.valor) {
+    alert('Preenche todos os campos');
+    return;
+  }
+
+  pedido.total = pedido.valor + pedido.taxa;
+  pedido.numRecibo = 'DP' + Math.floor(Math.random() * 9000000 + 1000000);
+
+  document.getElementById('nome-cliente-show').innerText = pedido.nomeCliente;
+  document.getElementById('servico-show').innerText = pedido.servicoNome;
+  document.getElementById('conta-show').innerText = pedido.conta;
+  document.getElementById('valor-base').innerText = pedido.valor.toFixed(2);
+  document.getElementById('taxa').innerText = pedido.taxa.toFixed(2);
+  document.getElementById('total').innerText = pedido.total.toFixed(2);
+  document.getElementById('total-mkesh').innerText = pedido.total.toFixed(2);
+  document.getElementById('total-mkesh2').innerText = pedido.total.toFixed(2);
+  document.getElementById('total-emola').innerText = pedido.total.toFixed(2);
+  document.getElementById('total-emola2').innerText = pedido.total.toFixed(2);
+  document.getElementById('ref-mkesh').innerText = pedido.numRecibo;
+  document.getElementById('ref-emola').innerText = pedido.numRecibo;
+
+  document.getElementById('step1').classList.add('hidden');
+  document.getElementById('step2').classList.remove('hidden');
+}
+
+function mostrarPagamento() {
+  const metodo = document.getElementById('metodo').value;
+  document.getElementById('pagamento-mkesh').classList.toggle('hidden', metodo!=='mkesh');
+  document.getElementById('pagamento-emola').classList.toggle('hidden', metodo!=='emola');
+}
+
+function enviarPedido() {
+  const metodo = document.getElementById('metodo').value;
+  if(!metodo){
+    alert('Escolhe o método de pagamento');
+    return;
+  }
+
+  let msg = `*Novo Pedido PagaDaki Services*%0A`;
+  msg += `Cliente: ${pedido.nomeCliente}%0A`;
+  msg += `WhatsApp: ${pedido.telCliente}%0A`;
+  msg += `Serviço: ${pedido.servicoNome}%0A`;
+  msg += `Conta/Número: ${pedido.conta}%0A`;
+  msg += `Valor: ${pedido.valor.toFixed(2)} MT%0A`;
+  msg += `Taxa: ${pedido.taxa.toFixed(2)} MT%0A`;
+  msg += `Total: ${pedido.total.toFixed(2)} MT%0A`;
+  msg += `Método: ${metodo.toUpperCase()}%0A`;
+  msg += `Ref: ${pedido.numRecibo}`;
+
+  window.open(`https://wa.me/${NUMERO_EMPRESA}?text=${msg}`, '_blank');
+  document.getElementById('step2').classList.add('hidden');
+  document.getElementById('step3').classList.remove('hidden');
+}
+
+function novoPedido() {
+  document.getElementById('step3').classList.add('hidden');
+  document.getElementById('step1').classList.remove('hidden');
+  document.getElementById('nome-cliente').value = '';
+  document.getElementById('cliente-tel').value = '';
+  document.getElementById('servico').value = '';
+  document.getElementById('conta').value = '';
+  document.getElementById('valor').value = '';
+  document.getElementById('opcoes-tv').classList.add('hidden');
+  document.getElementById('opcoes-recarga').classList.add('hidden');
+  document.getElementById('feeInfo').textContent = '';
+}
+</script>
+</body>
+</html>
