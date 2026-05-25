@@ -21,7 +21,6 @@ body {
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0,0,0,0.4);
 }
-
 .header {
   display: flex;
   align-items: center;
@@ -44,7 +43,6 @@ h2 {
   width: 40px;
   height: 40px;
 }
-
 .subtitle {
   text-align: center;
   color: #facc15;
@@ -54,7 +52,6 @@ h2 {
   text-transform: uppercase;
   margin-bottom: 20px;
 }
-
 label {
   display: block;
   margin-top: 12px;
@@ -138,7 +135,6 @@ button:active { opacity: 0.8; }
       <option value="agua">Água</option>
     </select>
 
-    <!-- Recarga -->
     <div id="opcoes-recarga" class="hidden">
       <label>Rede:</label>
       <select id="op-recarga">
@@ -149,7 +145,6 @@ button:active { opacity: 0.8; }
       </select>
     </div>
 
-    <!-- TV -->
     <div id="opcoes-tv" class="hidden">
       <label>Operadora TV:</label>
       <select id="tv-op">
@@ -175,7 +170,6 @@ button:active { opacity: 0.8; }
     <button onclick="irParaPagamento()">Continuar</button>
   </div>
 
-  <!-- Passo 2: Pagamento -->
   <div id="step2" class="hidden">
     <h3>Confirmar Pagamento</h3>
     <div class="total-box">
@@ -199,8 +193,8 @@ button:active { opacity: 0.8; }
       <p>📱 <span class="number-bold">835 285 053</span><br>
       <b>Nome: Tomocene Fernando Frio</b></p>
       <p><b>Instruções M-Kesh:</b><br>
-      1. Abre M-Kesh<br>
-      2. Transferir dinheiro<br>
+      1. Digita <b>*500#</b><br>
+      2. Escolhe <b>Transferir dinheiro</b><br>
       3. Cola o número <b>835285053</b><br>
       4. Confirma o nome e mete o valor <b><span id="total-mkesh2"></span> MT</b><br>
       5. Usa referência: <b><span id="ref-mkesh"></span></b></p>
@@ -211,8 +205,8 @@ button:active { opacity: 0.8; }
       <p>📱 <span class="number-bold">877 767 831</span><br>
       <b>Nome: Raiva Evaristo Cossa</b></p>
       <p><b>Instruções E-Mola:</b><br>
-      1. Digita *150#<br>
-      2. Escolhe Transferir dinheiro<br>
+      1. Digita <b>*150#</b><br>
+      2. Escolhe <b>Transferir dinheiro</b><br>
       3. Cola o número <b>877767831</b><br>
       4. Confirma o nome e mete o valor <b><span id="total-emola2"></span> MT</b><br>
       5. Usa referência: <b><span id="ref-emola"></span></b></p>
@@ -222,7 +216,6 @@ button:active { opacity: 0.8; }
     <button onclick="enviarPedido()">Fazer Pedido - Enviar para WhatsApp</button>
   </div>
 
-  <!-- Passo 3 -->
   <div id="step3" class="hidden">
     <div style="background:#22c55e;padding:15px;border-radius:10px;text-align:center;">
       Pedido enviado! Vamos confirmar o pagamento e te enviar o recibo oficial no WhatsApp 835285053.
@@ -269,9 +262,9 @@ function atualizarPacotesTV(){
 
 function calcularTaxaRecarga(valor){
   if(valor >= 10 && valor <= 20) return 1;
-  if(valor >= 30 && valor <= 60) return 3;
-  if(valor >= 70 && valor <= 90) return 4;
-  if(valor >= 100) return valor * 0.03;
+  if(valor >= 21 && valor <= 60) return 3;
+  if(valor >= 61 && valor <= 90) return 4;
+  if(valor >= 91) return valor * 0.03;
   return 0;
 }
 
